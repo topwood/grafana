@@ -168,6 +168,10 @@ export const NavBar = React.memo(() => {
 function shouldHideNavBar(location: HistoryLocation) {
   const queryParams = locationSearchToObject(location.search);
 
+  // 自定义参数，有的话就干掉侧边栏
+  if (queryParams.hideSideMenu) {
+    return true;
+  }
   if (getKioskMode(queryParams)) {
     return true;
   }
