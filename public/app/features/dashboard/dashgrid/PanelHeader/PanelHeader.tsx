@@ -7,6 +7,7 @@ import { Icon, useStyles2, ClickOutsideWrapper } from '@grafana/ui';
 import { DashboardModel } from 'app/features/dashboard/state/DashboardModel';
 import { PanelModel } from 'app/features/dashboard/state/PanelModel';
 import { getPanelLinksSupplier } from 'app/features/panel/panellinks/linkSuppliers';
+import { locationSearchToObject } from '@grafana/runtime';
 
 import PanelHeaderCorner from './PanelHeaderCorner';
 import { PanelHeaderLoadingIndicator } from './PanelHeaderLoadingIndicator';
@@ -32,7 +33,8 @@ export const PanelHeader: FC<Props> = ({ panel, error, isViewing, isEditing, dat
   const title = panel.getDisplayTitle();
   const className = cx('panel-header', !(isViewing || isEditing) ? 'grid-drag-handle' : '');
   const styles = useStyles2(panelStyles);
-
+  const queryParams = locationSearchToObject(location.search);
+  console.log(queryParams)
   return (
     <>
       <PanelHeaderLoadingIndicator state={data.state} onClick={onCancelQuery} />
@@ -60,7 +62,7 @@ export const PanelHeader: FC<Props> = ({ panel, error, isViewing, isEditing, dat
                     />
                   ) : null}
                   <h2 className={styles.titleText}>{title}</h2>
-                  {!dashboard.meta.publicDashboardAccessToken && (
+                  {!dashboard.meta.publicDashboardAccessToken && !queryParams.hideSideMenu && (
                     <div data-testid="panel-dropdown">
                       <Icon name="angle-down" className="panel-menu-toggle" />
                       {panelMenuOpen ? (
